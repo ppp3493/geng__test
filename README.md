@@ -24,6 +24,13 @@ GenG 백엔드 개발자 채용 프로세스 중 코딩 테스트 과제를 진�
 - Gradle
 - IDE (예: IntelliJ IDEA, Eclipse)
 
+### API 키 설정
+- `src/main/resources/application.properties` 파일에 Riot API 키를 추가해야 합니다. 
+- 다음 형식으로 API 키를 설정합니다:
+   ```properties
+   riot.api.key=YOUR_RIOT_API_KEY
+   ```
+
 ### 설치 절차
 1. 이 저장소를 클론합니다:
   ```
