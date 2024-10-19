@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Summoner Search</title>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div th:insert="~{header}"></div>
+<div class="search-container">
+    <h1>YOUR.GG Summoner Search</h1>
+    <form action="#" onsubmit="searchSummoner(event)">
+        <input type="text" id="summonerName" placeholder="소환사명을 입력하세요" />
+        <button type="submit">검색</button>
+    </form>
+</div>
+
+<script>
+    function searchSummoner(event) {
+        event.preventDefault(); // 폼 제출 방지
+        const name = document.getElementById('summonerName').value.trim();
+        if (name) {
+            window.location.href = `/summoner/${encodeURIComponent(name)}/latest`;
+        } else {
+            alert("소환사명을 입력하세요!");
+        }
+    }
+</script>
+</body>
+</html>

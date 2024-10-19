@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>소환사 프로필</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            width: 128px;
+            height: 128px;
+            border-radius: 10px;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        .tier-badge {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .tab-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+
+        .tab-buttons button.active {
+            background-color: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .match-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .match {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .match.win {
+            border-left: 5px solid #4caf50;
+        }
+
+        .match.lose {
+            border-left: 5px solid #f44336;
+        }
+
+        .champion {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .champion img {
+            width: 48px;
+            height: 48px;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .champion span {
+            font-size: 16px;
+        }
+
+        .champion small {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .stats {
+            text-align: right;
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{header}"></div>
+<!-- 프로필 정보 -->
+<div class="profile-container">
+    <img class="profile-image"
+         th:src="@{'https://ddragon.leagueoflegends.com/cdn/13.20.1/img/profileicon/' + ${profileIconId} + '.png'}"
+         alt="Profile Icon">
+    <div class="profile-info">
+        <h1 th:text="${summonerName}">소환사명</h1>
+        <p>레벨: <span th:text="${level}">0</span></p>
+        <div class="tier-badge">티어: <span th:text="${tier}">Unranked</span></div>
+    </div>
+</div>
+
+<!-- 탭 버튼 -->
+<div class="tab-buttons">
+    <button id="allBtn" onclick="showMatches('all')">전체</button>
+    <button id="soloBtn" onclick="showMatches('solo')">솔로랭크</button>
+    <button id="flexBtn" onclick="showMatches('flex')">자유랭크</button>
+    <button id="normalBtn" onclick="showMatches('normal')">일반게임</button>
+</div>
+
+<!-- 전적 리스트 -->
+<div class="match-container">
+    <!-- 솔로랭크 매치들 -->
+    <div class="match solo" th:each="match : ${soloRankMatches}">
+        <div class="champion">
+            <img th:src="@{'https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/' + ${match.get('championName')} + '.png'}"
+                 alt="Champion">
+            <span th:text="${match.get('championName')}">Champion Name</span>
+            <small>솔로랭크</small>
+        </div>
+        <div class="stats">
+            <p th:text="'KDA: ' + ${match.get('kills')} + '/' + ${match.get('deaths')} + '/' + ${match.get('assists')}">
+                KDA: 0/0/0
+            </p>
+            <p th:text="'게임 시간: ' + ${match.get('timePlayed') / 60} + '분'">게임 시간: 0분</p>
+
+            <a th:href="@{'/summoner/' + ${summonerName} + '/match/' + ${match.get('matchId')} }">상세보기</a>
+        </div>
+    </div>
+
+    <!-- 자유랭크 매치들 -->
+    <div class="match flex" th:each="match : ${flexRankMatches}">
+        <div class="champion">
+            <img th:src="@{'https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/' + ${match.get('championName')} + '.png'}"
+                 alt="Champion">
+            <span th:text="${match.get('championName')}">Champion Name</span>
+            <small>자유랭크</small>
+        </div>
+        <div class="stats">
+            <p th:text="'KDA: ' + ${match.get('kills')} + '/' + ${match.get('deaths')} + '/' + ${match.get('assists')}">
+                KDA: 0/0/0
+            </p>
+            <p th:text="'게임 시간: ' + ${match.get('timePlayed') / 60} + '분'">게임 시간: 0분</p>
+
+            <a th:href="@{'/summoner/' + ${summonerName} + '/match/' + ${match.get('matchId')} }">상세보기</a>
+        </div>
+    </div>
+
+    <!-- 일반 게임 매치들 -->
+    <div class="match normal" th:each="match : ${normalMatches}">
+        <div class="champion">
+            <img th:src="@{'https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/' + ${match.get('championName')} + '.png'}"
+                 alt="Champion">
+            <span th:text="${match.get('championName')}">Champion Name</span>
+            <small>일반게임</small>
+        </div>
+        <div class="stats">
+            <p th:text="'KDA: ' + ${match.get('kills')} + '/' + ${match.get('deaths')} + '/' + ${match.get('assists')}">
+                KDA: 0/0/0
+            </p>
+            <p th:text="'게임 시간: ' + ${match.get('timePlayed') / 60} + '분'">게임 시간: 0분</p>
+
+            <!--/*@thymesVar id="match" type=""*/-->
+            <a th:href="@{'/summoner/' + ${summonerName} + '/match/' + ${match.get('matchId')} }">상세보기</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showMatches(type) {
+        var allMatches = document.getElementsByClassName('match');
+        for (var i = 0; i < allMatches.length; i++) {
+            allMatches[i].style.display = 'none';
+        }
+
+        if (type === 'all') {
+            for (var i = 0; i < allMatches.length; i++) {
+                allMatches[i].style.display = 'flex';
+            }
+        } else {
+            var filteredMatches = document.getElementsByClassName(type);
+            for (var i = 0; i < filteredMatches.length; i++) {
+                filteredMatches[i].style.display = 'flex';
+            }
+        }
+
+        // 버튼 활성화 표시
+        document.querySelectorAll('.tab-buttons button').forEach(button => button.classList.remove('active'));
+        document.getElementById(type + 'Btn').classList.add('active');
+    }
+
+    showMatches('all');
+</script>
+
+</body>
+</html>

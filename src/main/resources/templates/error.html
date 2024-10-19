@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>오류 발생</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        .error-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        h1 {
+            color: #f44336;
+        }
+        p {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="error-container">
+    <h1>오류 발생</h1>
+    <p th:text="${errorMessage}">오류 메시지</p>
+    <a href="/" style="text-decoration: none; color: blue;">홈으로 돌아가기</a>
+</div>
+
+</body>
+</html>
